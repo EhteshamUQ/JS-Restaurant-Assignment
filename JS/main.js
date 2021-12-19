@@ -92,7 +92,7 @@ function makeModal(ev) {
                 <hr/>
                 <div class="modal-footer">
                     <p class = 'total-heading'>Total : <span class = 'total-modal-price'></span></p>
-                    <p class = "footer-btn">Generate Bill(Close Session)</p>
+                    <p class = "footer-btn" onclick = "endSession(this);">Generate Bill(Close Session)</p>
                 </div>
             </div>
         </div>`;
@@ -173,18 +173,17 @@ function dragDrop(e) {
     let tableNumber = this.querySelector('h2').innerHTML;
     let dishName = menuItem.item_name;
     let total = this.querySelector('.total');
-    let totalItems = 0;
+
     if (!sessionStorage.getItem(tableNumber)) {
         addNewMapIntoSession(dishName, tableNumber, menuItem, total);
         this.querySelector('.total-items').innerHTML = 1;
-        totalItems = 1;
+
     }
     else {
-        totalItems = changeMapItemsInSession(tableNumber, dishName, total, menuItem);
+        let totalItems = changeMapItemsInSession(tableNumber, dishName, total, menuItem);
         this.querySelector('.total-items').innerHTML = totalItems;
     }
-    sessionStorage.setItem(tableNumber + "totalItems" , totalItems);
-    
+
 }
 // Helper method
 function changeMapItemsInSession(tableNumber, dishName, total, menuItem) {
@@ -306,6 +305,17 @@ function changeItemQuantity(clickedItem) {
         sessionStorage.setItem(tableName, JSON.stringify(Array.from(itemMap.entries())));
     }
     updatePriceAndTotal(clickedItem.parentElement, key, tableName, 1, '-');
+    updateTotalItems(tableName);
+}
+
+// + button on click
+function incrementItem(clickedButton) {
+    let inputField = clickedButton.parentElement.querySelector('.count-btn');
+    inputField.value = Number(inputField.value) + 1;
+    let key = clickedButton.parentElement.querySelector('.dish-name').innerHTML;
+    let tableName = getTableName();
+    updatePriceAndTotal(clickedButton.parentElement, key, tableName, 1, '+');
+    updateTotalItems(tableName);
 }
 
 // Called by Delete Icon .
@@ -316,6 +326,7 @@ function deleteElement(pressedButton) {
     deleteItemFromSession(pressedButton, tableName);
     updatePriceAndTotal(pressedButton.parentElement, key,
         tableName, Number(pressedButton.parentElement.querySelector('.count-btn').value), '-');
+    updateTotalItems(tableName);
     changeSerialNumbers();
 }
 
@@ -329,7 +340,7 @@ function changeSerialNumbers() {
 
 // Retrieve Table Name from Modal Header.
 function getTableName() {
-    let tableName = document.querySelector('.modal-header');
+    let tableName = document.querySelector('.modal-header');// Getting Table Name from Modal Header
     tableName = tableName.querySelector('h2').innerHTML;
     tableName = tableName.split(" ")[0];
     return tableName;
@@ -347,7 +358,6 @@ function deleteItemFromSession(clickedItem, tableName) {
 
 //Updating Total in Modal and Price in Table card
 function updatePriceAndTotal(element, key, tableName, count, sign) {
-    //console.log("Working - UpdatePriceAndTotal");
     let price = menuItems.filter(ele => ele.item_name == key)[0].price;
     let totalPrice = Number(sessionStorage.getItem(tableName + "totalprice"));
     totalPrice = sign == '-' ? totalPrice - price * (count ?? 1) : totalPrice + price * (count ?? 1);
@@ -361,14 +371,57 @@ function updatePriceAndTotal(element, key, tableName, count, sign) {
     }
 }
 
-// + button on click
-function incrementItem(clickedButton) {
-    let inputField = clickedButton.parentElement.querySelector('.count-btn');
-    inputField.value = Number(inputField.value) + 1;
-    let key = clickedButton.parentElement.querySelector('.dish-name').innerHTML;
-    let tableName = getTableName();
-    updatePriceAndTotal(clickedButton.parentElement, key, tableName, 1, '+');
+
+
+function updateTotalItems(tableName) {
+    let itemsMap = new Map(JSON.parse(sessionStorage.getItem(tableName)) ?? []);
+    let totalItems = 0;
+    for (let [_, values] of itemsMap.entries()) {
+        totalItems += values;
+    }
+    let tableCards = document.querySelectorAll('.table-card');
+    for (let tableCard of tableCards) {
+        //    console.log(tableCard);
+        if (tableCard.querySelector('.table-title').innerHTML == tableName)
+            tableCard.querySelector('.total-items').innerHTML = totalItems;
+    }
+
 }
 
+// Generate Bill . End Session.
+function endSession() {
+    let tableName = getTableName();
+    let itemsMap = new Map(JSON.parse(sessionStorage.getItem(tableName)));
+    let totalBill = JSON.parse(sessionStorage.getItem(tableName + "totalprice"));
+    if (totalBill == null)
+        return;
+    let bill = '';
+    for (let [key, value] of itemsMap) {
+        bill += `${key}  x  ${value}\n`;
+    }
+    bill += `Your total Bill is : ${totalBill}\nThank you for Dinning with us\nWe Hope you'll be back soon.`;
+    window.alert(bill);
+    sessionStorage.removeItem(tableName);
+    sessionStorage.removeItem(tableName + "totalprice");
+    resetPriceAndTotalItems();
+    closeModal();
+}
 
+function closeModal() {
+    removeBackground(getTableName());
+    document.querySelector('.modal').remove();
+    addTableListeners();
+    addMenuItemListeners();
+}
 
+function resetPriceAndTotalItems() {
+    let tableName = getTableName();
+    let tableCards = document.querySelectorAll('.table-card');
+    for (let tableCard of tableCards) {
+        if (tableCard.querySelector('.table-title').innerHTML == tableName) {
+            tableCard.querySelector('.total-items').innerHTML = 0;
+            tableCard.querySelector('.total').innerHTML = 0;
+        }
+    }
+
+}
