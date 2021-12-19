@@ -108,6 +108,10 @@
     width: 5%;
 }
 
+.clicked{
+    background-color: yellowgreen;
+}
+
 .delete-btn {
     float: bottom right;
     margin-left: 2%;
