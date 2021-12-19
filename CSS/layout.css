@@ -1,0 +1,116 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.layout{
+    display: flex;
+}
+
+.tables-div{
+    flex: 1;
+    padding: 10px;
+    align-content: center;
+}
+
+.menu-div{
+    flex : 4;
+    padding: 10px;
+}
+
+.tables-heading{
+    text-align: center;
+    padding: 2px;
+    margin: 2px;
+}
+
+.search-table{
+    width: 100%;
+    margin: 2px;
+    padding: 2px;
+}
+
+.vertical-rule{
+    flex : 0.01;
+    background-color: black;
+    height: 100%vh;
+    width: 0.1px;
+}
+
+
+.menu-heading{
+    text-align: center;
+    padding: 2px;
+    margin: 2px;
+}
+
+.search-menu{
+    width: 50%;
+    margin: 2px;
+    padding: 2px;
+}
+
+
+.menu-card{
+    font-family: 'Courier New', Courier, monospace;
+    box-shadow: 2px 1px black;
+    border: 1px solid gainsboro;
+    margin: 5px;
+    padding: 5px;
+}
+
+.card-title{
+    margin: 5px;
+    padding: 5px;
+    font-weight: 500;
+
+}
+
+.card-price{
+    margin: 5px;
+    padding : 5px;
+    font-weight: 200;
+    font-family: 'Courier New', Courier, monospace;
+    display: inline-block;
+}
+.card-cuisine{
+    display: inline-block;
+    margin: 5px;
+    padding : 5px;
+}
+
+.table-card{
+    margin: 10px;
+    padding: 15px;
+    font-family: 'Courier New', Courier, monospace;
+    box-shadow: 2px 1px black;
+    border: 1px solid gainsboro;
+}
+.table-title{
+    font-size: large;
+    margin: 5px;
+    padding: 5px;
+}
+.table-total{
+    font-weight: 100;
+    font-size: small;
+    padding: 2px;
+    display: inline-block;
+}
+
+.total{
+    display: inline-block;
+    font-size: small;
+}
+
+.total-items{
+    display: inline-block;
+    font-size: small;
+}
+
+.hovered{
+    border-style: dashed;
+    border: 2px solid black;
+    
+}

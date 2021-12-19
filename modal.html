@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal</title>
+    <link rel="stylesheet" href="./CSS/modal.css">
+</head>
+<body>
+    <button class="openModal">OpenModal</button>
+    <div class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>${tableName}</h2>
+                <span>&times;</span>
+            </div>
+            <div class="modal-content"></div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+
+    <script src="./JS/constants.js"></script>
+</body>
+</html>
+
+
+<div class="modal">
+    <div class = 'modal-content'>
+        <div class="modal-header">
+            <h2>${tableName} | Order Details</h2>
+            <span class = 'close-btn'>&times;</span>
+        </div>
+        <div class="modal-items"></div>
+        <div class="modal-footer">
+            <p class = "footer-btn">Generate Bill(Close Session)</p>
+        </div>
+    </div>
+</div>
